@@ -1,6 +1,0 @@
-const feedback = {correct:'correct.webm', retry:'retry.webm'};
-function ensureFeedback(){let l=document.querySelector('.feedback-layer');if(!l){l=document.createElement('div');l.className='feedback-layer';l.innerHTML='<video playsinline></video>';document.body.appendChild(l)}return l}
-function playFeedback(type, after){const l=ensureFeedback(),v=l.querySelector('video');v.src=feedback[type];v.currentTime=0;l.classList.add('show');const finish=()=>{l.classList.remove('show');v.onended=null;after&&after()};v.onended=finish;v.onerror=finish;v.play().catch(()=>setTimeout(finish,900))}
-function bindAnswers(scope=document){scope.querySelectorAll('[data-answer]').forEach(btn=>btn.addEventListener('click',()=>{if(btn.disabled)return;const ok=btn.dataset.answer==='correct';btn.classList.add(ok?'correct':'wrong');if(ok){scope.querySelectorAll('[data-answer]').forEach(x=>x.disabled=true);playFeedback('correct',()=>{const n=scope.querySelector('[data-next]');if(n)n.classList.remove('hidden')})}else{playFeedback('retry',()=>btn.classList.remove('wrong'))}}))}
-function home(){location.href='index.html'}
-document.addEventListener('DOMContentLoaded',()=>{document.querySelectorAll('[data-home]').forEach(x=>x.addEventListener('click',home));bindAnswers(document)});
