@@ -1,0 +1,32 @@
+<!doctype html><html lang="ar" dir="rtl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>أتدرب</title><link rel="stylesheet" href="style.css"></head><body><div class="header-wrap"><img src="header-practice.png" alt="أتدرب"><button class="hotspot home-button" data-home aria-label="الرئيسية"></button></div><main class="page"><section class="panel" id="practice"><h1 class="title">مَاذَا تَفْعَلُ مِنَارَا؟</h1><div id="pq"></div></section></main><script src="app.js"></script><script>
+const qs=[{img:'01-before-entry.png',q:'مَاذَا تَفْعَلُ مِنَارَا قَبْلَ الدُّخُولِ؟',a:['تَقُولُ الدُّعَاءَ','تَدْخُلُ مُبَاشَرَةً'],c:0},{img:'02-left-foot.png',q:'بِأَيِّ قَدَمٍ تَدْخُلُ مِنَارَا؟',a:['الْيُسْرَى','الْيُمْنَى'],c:0},{img:'03-close-door.png',q:'مَاذَا نَسِيَتْ مِنَارَا؟',a:['إِغْلَاقَ الْبَابِ خَلْفَهَا','تَرْكَ الْبَابِ مَفْتُوحًا'],c:0},{img:'05-exit-right.png',q:'بِأَيِّ قَدَمٍ تَخْرُجُ مِنَارَا؟',a:['الْيُمْنَى','الْيُسْرَى'],c:0},{img:'01-before-entry.png',q:'مَاذَا أَقُولُ قَبْلَ الدُّخُولِ لِدَوْرَةِ الْمِيَاهِ؟',a:['اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ','غُفْرَانَكَ'],c:0},{img:'05-exit-right.png',q:'مَاذَا أَقُولُ عِنْدَ الْخُرُوجِ مِنْ دَوْرَةِ الْمِيَاهِ؟',a:['غُفْرَانَكَ','اللَّهُمَّ إِنِّي أَعُوذُ بِكَ مِنَ الْخُبُثِ وَالْخَبَائِثِ'],c:0}];let n=0;const pq=document.getElementById('pq');function draw(){if(n>=qs.length){pq.innerHTML='<div class="result">أَحْسَنْتِ! أَتْمَمْتِ التَّدْرِيبَ.<div class="center"><button class="primary" id="sortgo" style="margin-top:18px">تَدْرِيبُ التَّرْتِيبِ</button></div></div>';document.getElementById('sortgo').onclick=sortMode;return}const x=qs[n];pq.innerHTML=`<img class="quiz-image" src="${x.img}"><div class="question">${x.q}</div><div class="answers">${x.a.map((a,k)=>`<button class="answer" data-answer="${k===x.c?'correct':'wrong'}">${a}</button>`).join('')}</div><div class="center"><button class="primary hidden" data-next id="nx" style="margin-top:20px">التَّالِي</button></div>`;bindAnswers(pq);document.getElementById('nx').onclick=()=>{n++;draw()}}
+function sortMode(){const order=['أَقُولُ الدُّعَاءَ قَبْلَ الدُّخُولِ','أَدْخُلُ بِقَدَمِي الْيُسْرَى','أُغْلِقُ الْبَابَ خَلْفِي','أَضْغَطُ جِهَازَ الطَّرْدِ','أَخْرُجُ بِقَدَمِي الْيُمْنَى وَأَقُولُ: غُفْرَانَكَ','أَغْسِلُ يَدَيَّ بِالْمَاءِ وَالصَّابُونِ'];let items=[...order].sort(()=>Math.random()-.5);
+pq.innerHTML=`<style>
+#sort{display:flex;flex-direction:column;gap:12px;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none}
+.sort-row{display:grid;grid-template-columns:1fr 58px;gap:10px;align-items:center}
+.sort-item{min-height:58px;display:flex;align-items:center;justify-content:flex-start;padding:12px 18px;border:2px dashed #9fd4f2;border-radius:18px;background:#fff;font-weight:700;line-height:1.7}
+.move-buttons{display:flex;flex-direction:column;gap:5px}
+.move-btn{border:0;border-radius:12px;background:#70c8ee;color:#174f73;font-size:22px;font-weight:900;min-height:28px;cursor:pointer;touch-action:manipulation}
+.move-btn:disabled{opacity:.28}
+</style>
+<h2 class="title">رَتِّبِي الْآدَابَ</h2>
+<p class="note">اِسْتَخْدِمِي السَّهْمَيْنِ ⬆️ ⬇️ لِتَرْتِيبِ الْآدَابِ مِنَ الْأَوَّلِ إِلَى الْأَخِيرِ.</p>
+<div class="sortable" id="sort"></div>
+<div class="center"><button class="primary" id="check" style="margin-top:20px">أَتَحَقَّقُ</button></div>`;
+
+const box=document.getElementById('sort');
+function renderSort(){
+ box.innerHTML=items.map((x,i)=>`<div class="sort-row">
+   <div class="sort-item">${x}</div>
+   <div class="move-buttons">
+     <button class="move-btn up" data-i="${i}" aria-label="تحريك لأعلى" ${i===0?'disabled':''}>⬆️</button>
+     <button class="move-btn down" data-i="${i}" aria-label="تحريك لأسفل" ${i===items.length-1?'disabled':''}>⬇️</button>
+   </div>
+ </div>`).join('');
+ box.querySelectorAll('.up').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;[items[i-1],items[i]]=[items[i],items[i-1]];renderSort()});
+ box.querySelectorAll('.down').forEach(b=>b.onclick=()=>{const i=+b.dataset.i;[items[i+1],items[i]]=[items[i],items[i+1]];renderSort()});
+}
+renderSort();
+document.getElementById('check').onclick=()=>{if(items.every((x,k)=>x===order[k]))playFeedback('correct',trueFalseMode);else playFeedback('retry')}}
+function trueFalseMode(){pq.innerHTML=`<h2 class="title">صَحٌّ أَمْ خَطَأٌ؟</h2><img class="quiz-image" src="wrong-enter-right.png"><div class="question">تَدْخُلُ مِنَارَا دَوْرَةَ الْمِيَاهِ بِقَدَمِهَا الْيُمْنَى، هَلْ تَصَرُّفُهَا صَحِيحٌ؟</div><div class="answers"><button class="answer" data-answer="wrong">صَحٌّ</button><button class="answer" data-answer="correct">خَطَأٌ</button></div><div class="center"><a class="primary hidden" data-next href="game.html" style="margin-top:20px;text-decoration:none">أَلْعَبُ وَأُطَبِّقُ</a></div>`;bindAnswers(pq)}
+draw();</script></body></html>
